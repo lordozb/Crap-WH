@@ -6,6 +6,14 @@ package news;
  * and open the template in the editor.
  */
 //import com.vnetpublishing.java.suapp.ISuperUserApplication;
+import com.notification.NotificationFactory;
+import com.notification.NotificationFactory.Location;
+import com.notification.NotificationManager;
+import com.notification.manager.SimpleManager;
+import com.notification.types.IconNotification;
+import com.theme.ThemePackagePresets;
+import com.utils.IconUtils;
+import com.utils.Time;
 import java.net.*;
 import java.io.*;
 import javax.swing.JOptionPane;
@@ -56,7 +64,7 @@ public class Form_Main extends javax.swing.JFrame {
       
     public Form_Main() {
         initComponents();
-        
+        //System.out.println(.2*.35);
         this.setLocationRelativeTo(null);
 //        getContentPane().setBackground(new Color(21,21,21) );
         stop.setEnabled(false);
@@ -578,14 +586,14 @@ public class Form_Main extends javax.swing.JFrame {
         
         }
     
-    public void Cyberoam(int x,String u, String p) throws NoSuchAlgorithmException, KeyManagementException
+    public void Cyberoam(int x,String u, String p) throws NoSuchAlgorithmException, KeyManagementException, InterruptedException
     {
          NoCheck();
         httpPostLogin(x,u,p);
     
     }
     
-    public void httpPostLogin (int x,String u,String p)
+    public void httpPostLogin (int x,String u,String p) throws InterruptedException
     {
         try
         {
@@ -834,157 +842,43 @@ catch(HeadlessException | IOException e){
     }//GEN-LAST:event_jLabel19MouseClicked
     private void PostSuccess()
     {
-        jSuccessFrame.setSize(350, 143);   
-         Dimension scrSize = Toolkit.getDefaultToolkit().getScreenSize();// size of the screen
-
-Insets toolHeight = Toolkit.getDefaultToolkit().getScreenInsets(jSuccessFrame.getGraphicsConfiguration());// height of the task bar
-jLabel9.setText(jUsr1.getText());
-jSuccessFrame.setLocation(scrSize.width - jSuccessFrame.getWidth(), scrSize.height - toolHeight.bottom - jSuccessFrame.getHeight());
-jLabel15.setText(jUsr1.getText());
-jSuccessFrame.setAlwaysOnTop(true);
-jSuccessFrame.getContentPane().setBackground(Color.yellow);
-jSuccessFrame.setVisible(true);
-jFailureFrame.setVisible(false);
-COUNTER++;
+    
+        COUNTER++;
 jButton1.setText("De-Authenticate");
-MyTimer("su");
 
+    NotificationFactory factory = new NotificationFactory(ThemePackagePresets.cleanDark());
+    NotificationManager man = new SimpleManager(Location.SOUTHEAST);
+    IconNotification note = factory.buildIconNotification("Logged In", "User "+jUsr1.getText()+" has logged in", 
+IconUtils.createIcon("/news/exclamation.png", 40, 40));
+    note.setCloseOnClick(true);
+    man.addNotification(note, Time.seconds(4));
+    
     }
-    private void PostFail()
+                //Form_Main.CENTER_ALIGNMENT;
+                
+             //   new Form_Main().setVisible(true);
+                
+               // Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
+//Form_Main.class.setLocation(dim.width/2-this.getSize().width/2, dim.height/2-this.getSize().height/2);
+             
+                //stop.setEnabled(false);
+                
+    private void PostFail() throws InterruptedException
     {
-        jFailureFrame.setSize(350, 143);   
-         Dimension scrSize = Toolkit.getDefaultToolkit().getScreenSize();// size of the screen
-
-Insets toolHeight = Toolkit.getDefaultToolkit().getScreenInsets(jFailureFrame.getGraphicsConfiguration());// height of the task bar
-
-jFailureFrame.setLocation(scrSize.width - jFailureFrame.getWidth(), scrSize.height - toolHeight.bottom - jFailureFrame.getHeight());
-jLabel15.setText(jUsr1.getText());
-jFailureFrame.getContentPane().setBackground(Color.yellow);
-jFailureFrame.setAlwaysOnTop(true);
-jFailureFrame.setVisible(true);
-jSuccessFrame.setVisible(false);
-MyTimer("fa");
-COUNTER_0++;
-jButton1.setText("Authenticate");
+        
 //try{Thread.sleep(4000);jFailureFrame.setVisible(false);}catch(Exception e){}
+    NotificationFactory factory = new NotificationFactory(ThemePackagePresets.cleanDark());
+    NotificationManager man = new SimpleManager(Location.SOUTHEAST);
+    IconNotification note = factory.buildIconNotification("Logged Out", "User "+jUsr1.getText()+" has logged out", 
+IconUtils.createIcon("/news/exclamation.png", 40, 40));
+    note.setCloseOnClick(true);
+    man.addNotification(note, Time.seconds(4));
+COUNTER_0++;
+jButton1.setText("Authenticate");    
     }
     
     //@SuppressWarnings("empty-statement")
-    public void MyTimer(String s) {
-
-        TimerTask task;
-
-        task = new TimerTask() {
-            @Override
-            public void run() { 
-                seconds++;
-                if(seconds >3)
-                {
-                    if(s.equalsIgnoreCase("su"))
-                        jSuccessFrame.setVisible(false);
-                    else
-                        jFailureFrame.setVisible(false);
-                }
-            }
-        };
-         timer.schedule(task, 0, 1000);
-
-    }
-    
-    public void Ping()
-            
-    {
-        try{
-                 Process p=Runtime.getRuntime().exec("cmd /c ping www.google.com -n 1"); 
-             
-          BufferedReader reader=new BufferedReader(new InputStreamReader(p.getInputStream())); 
-          String s="";
-          int i=0;
-          int fl=0;
-          while((s=reader.readLine())!=null && i<3 )
-          {
-              System.out.println(s);
-              i++;
-              if(s.contains("out"))
-                  fl=1;
-          }
-          p.destroyForcibly();
-         if(fl==0)
-     {
-            jSuccessFrame.setSize(350, 163);
-         Dimension scrSize = Toolkit.getDefaultToolkit().getScreenSize();// size of the screen
-
-Insets toolHeight = Toolkit.getDefaultToolkit().getScreenInsets(jSuccessFrame.getGraphicsConfiguration());// height of the task bar
-
-jSuccessFrame.setLocation(scrSize.width - jSuccessFrame.getWidth(), scrSize.height - toolHeight.bottom - jSuccessFrame.getHeight());
-jLabel9.setText(jUsr1.getText());
-jSuccessFrame.setAlwaysOnTop(true);
-jSuccessFrame.setVisible(true);
-            
-     }
-         else{
-         jFailureFrame.setSize(350, 163);
-         Dimension scrSize = Toolkit.getDefaultToolkit().getScreenSize();// size of the screen
-
-Insets toolHeight = Toolkit.getDefaultToolkit().getScreenInsets(jFailureFrame.getGraphicsConfiguration());// height of the task bar
-
-jFailureFrame.setLocation(scrSize.width - jFailureFrame.getWidth(), scrSize.height - toolHeight.bottom - jFailureFrame.getHeight());
-jLabel15.setText(jUsr1.getText());
-jFailureFrame.setAlwaysOnTop(true);
-jFailureFrame.setVisible(true);
-            
-         }
-    
-        
-        
-        }
-        catch(HeadlessException e)
-        {} catch (IOException ex) {
-            Logger.getLogger(Form_Main.class.getName()).log(Level.SEVERE, null, ex);
-        }
-    }
-    public void Authenticate(int x)
-            {
-            
-            try{
-            Process p=Runtime.getRuntime().exec("cmd /c start \"link\" https://172.16.1.1:8090/httpclient.html"); 
-            p.waitFor(); 
-            Thread.sleep(x);
-            Robot r = new Robot();
-                r.keyPress(KeyEvent.VK_TAB);
-                r.keyRelease(KeyEvent.VK_TAB);
-                r.keyPress(KeyEvent.VK_TAB);
-                r.keyRelease(KeyEvent.VK_TAB);
-            
-                String usr = jUsr1.getText();
-            for(int i=0; i<usr.length();i++)
-            {
-                char c=usr.charAt(i);
-                KeyPress(c);
-                        
-            }
-            Thread.sleep(50);
-            r.keyPress(KeyEvent.VK_TAB);
-                r.keyRelease(KeyEvent.VK_TAB);
-            String psw =jPsw1.getText();
-            for(int i=0; i<psw.length();i++)
-            {
-                char c=psw.charAt(i);
-                KeyPress(c);
-                //Thread.sleep(10);
-            }
-                Thread.sleep(50);
-                r.keyPress(KeyEvent.VK_ENTER);
-                r.keyRelease(KeyEvent.VK_ENTER);
-                Thread.sleep(3000);
-            
-}
-        catch(AWTException | IOException | InterruptedException ex  ) {
-    Thread.currentThread().interrupt();
-}
-            
-            }
-    
+   
     public void ReadDAT() throws FileNotFoundException, IOException
         {
          
@@ -1064,163 +958,6 @@ while(sc.hasNextLine() && i<4){
        bw.close();
    }
    
-    public void KeyPress(char a)
-    {
-        try {
-        Robot r = new Robot();
-        switch(a){
-            case 'a': r.keyPress(KeyEvent.VK_A);
-                      r.keyRelease(KeyEvent.VK_A);
-                break;
-            case 'b': r.keyPress(KeyEvent.VK_B);
-                      r.keyRelease(KeyEvent.VK_B);  
-                break;
-            case 'c': r.keyPress(KeyEvent.VK_C);
-                r.keyRelease(KeyEvent.VK_C);
-                break;
-            case 'd': r.keyPress(KeyEvent.VK_D);
-                r.keyRelease(KeyEvent.VK_D);
-            break;
-            case 'e': r.keyPress(KeyEvent.VK_E);
-            r.keyRelease(KeyEvent.VK_E);
-                break;
-            case 'f': r.keyPress(KeyEvent.VK_F);
-               r.keyRelease(KeyEvent.VK_F);
-               break;
-            case 'g': r.keyPress(KeyEvent.VK_G);
-               r.keyRelease(KeyEvent.VK_G);
-               break;
-            case 'h': r.keyPress(KeyEvent.VK_H);
-               r.keyRelease(KeyEvent.VK_H);
-               break;
-            case 'i': r.keyPress(KeyEvent.VK_I);
-               r.keyRelease(KeyEvent.VK_I);
-               break;
-            case 'j': r.keyPress(KeyEvent.VK_J);
-               r.keyRelease(KeyEvent.VK_J);
-               break;
-            case 'k': r.keyPress(KeyEvent.VK_K);
-               r.keyRelease(KeyEvent.VK_K);
-               break;
-            case 'l': r.keyPress(KeyEvent.VK_L);
-               r.keyRelease(KeyEvent.VK_L);
-               break;
-            case 'm': r.keyPress(KeyEvent.VK_M);
-               r.keyRelease(KeyEvent.VK_M);
-               break;
-            case 'n': r.keyPress(KeyEvent.VK_N);
-               r.keyRelease(KeyEvent.VK_N);
-               break;
-            case 'o': r.keyPress(KeyEvent.VK_O);
-               r.keyRelease(KeyEvent.VK_O);
-               break;
-            case 'p': r.keyPress(KeyEvent.VK_P);
-               r.keyRelease(KeyEvent.VK_P);
-               break;
-            case 'q': r.keyPress(KeyEvent.VK_Q);
-               r.keyRelease(KeyEvent.VK_Q);
-               break;
-            case 'r': r.keyPress(KeyEvent.VK_R);
-               r.keyRelease(KeyEvent.VK_R);
-               break;
-            case 's': r.keyPress(KeyEvent.VK_S);
-               r.keyRelease(KeyEvent.VK_S);
-               break;
-            case 't': r.keyPress(KeyEvent.VK_T);
-               r.keyRelease(KeyEvent.VK_T);
-               break;
-            case 'u': r.keyPress(KeyEvent.VK_U);
-               r.keyRelease(KeyEvent.VK_U);
-               break;
-            case 'v': r.keyPress(KeyEvent.VK_V);
-               r.keyRelease(KeyEvent.VK_V);
-               break;
-            case 'w': r.keyPress(KeyEvent.VK_W);
-               r.keyRelease(KeyEvent.VK_W);
-               break;
-            case 'x': r.keyPress(KeyEvent.VK_X);
-               r.keyRelease(KeyEvent.VK_Y);
-               break;
-            case 'y': r.keyPress(KeyEvent.VK_Y);
-               r.keyRelease(KeyEvent.VK_X);
-               break;
-            case 'z': r.keyPress(KeyEvent.VK_Z);
-               r.keyRelease(KeyEvent.VK_Z);
-               break;
-            case '1': r.keyPress(KeyEvent.VK_1);
-               r.keyRelease(KeyEvent.VK_1);
-               break;
-            case '2': r.keyPress(KeyEvent.VK_2);
-               r.keyRelease(KeyEvent.VK_2);
-               break;
-            case '3': r.keyPress(KeyEvent.VK_3);
-               r.keyRelease(KeyEvent.VK_3);
-               break;
-            case '4': r.keyPress(KeyEvent.VK_4);
-               r.keyRelease(KeyEvent.VK_4);
-               break;
-            case '5': r.keyPress(KeyEvent.VK_5);
-               r.keyRelease(KeyEvent.VK_5);
-               break;
-            case '6': r.keyPress(KeyEvent.VK_6);
-               r.keyRelease(KeyEvent.VK_6);
-               break;
-            case '7': r.keyPress(KeyEvent.VK_7);
-               r.keyRelease(KeyEvent.VK_7);
-               break;
-            case '8': r.keyPress(KeyEvent.VK_8);
-               r.keyRelease(KeyEvent.VK_8);
-               break;
-            case '9': r.keyPress(KeyEvent.VK_9);
-               r.keyRelease(KeyEvent.VK_9);
-               break;
-            case '0': r.keyPress(KeyEvent.VK_0);
-               r.keyRelease(KeyEvent.VK_O);
-               break;
-                
-        }
-        
-} catch (AWTException e) {
-        e.printStackTrace();
-}
-    }
-    
-    public void Post()
-     {
-     try
-     {
-    URL url;
-    URLConnection   urlConn;
-    DataOutputStream    printout;
-    DataInputStream     input;
-    
-    url = new URL ("https://172.16.1.1:8090/httpclient.html");
-    urlConn = url.openConnection();
-    urlConn.setDoInput (true);
-    urlConn.setDoOutput (true);
-    urlConn.setUseCaches (false);
-    urlConn.setRequestProperty
-    ("Content-Type", "application/x-www-form-urlencoded");
-    printout = new DataOutputStream (urlConn.getOutputStream ());
-    String content = "username=be1041515&password=40796";
-    printout.writeBytes (content);
-    printout.flush ();
-    printout.close ();
-    input = new DataInputStream (urlConn.getInputStream ());
-    String str;
-    while (null != ((str = input.readLine())))
-    {
-    System.out.println (str);
-    jTextArea1.append(str+'\n');
-    }
-    input.close ();
-     }
-     catch(Exception e)
-     {
-         System.out.println("fuck!");
-     }
-     
-     }
     public void WifiStop(){
             try 
 { 
